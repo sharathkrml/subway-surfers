@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { PerspectiveCamera } from '@react-three/drei';
+import { PerspectiveCamera, Sky } from '@react-three/drei';
 import * as THREE from 'three';
 import { CONFIG } from '../config';
 import { useGameStore } from '../state/gameStore';
@@ -232,24 +232,45 @@ function GameWorld() {
 function Lights() {
   return (
     <>
-      <ambientLight intensity={0.45} />
-      <directionalLight
-        position={[5, 12, 5]}
-        intensity={1.2}
-        castShadow
-        shadow-mapSize-width={1024}
-        shadow-mapSize-height={1024}
+      <Sky
+        distance={450000}
+        sunPosition={[5, 3, -20]}
+        inclination={0.56}
+        azimuth={0.22}
+        turbidity={5}
+        rayleigh={1.8}
       />
-      <fog attach="fog" args={['#0d0d1a', 25, 70]} />
-      <color attach="background" args={[0x0d0d1a]} />
+      <hemisphereLight args={['#c9efff', '#9b6245', 1.65]} />
+      <ambientLight intensity={0.7} />
+      <directionalLight
+        position={[-8, 14, 6]}
+        color="#fff0cf"
+        intensity={2.6}
+        castShadow
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
+        shadow-camera-left={-10}
+        shadow-camera-right={10}
+        shadow-camera-top={14}
+        shadow-camera-bottom={-4}
+      />
+      <fog attach="fog" args={['#91d7e8', 40, 88]} />
     </>
   );
 }
 
 export function GameScene() {
   return (
-    <Canvas shadows className="game-canvas" dpr={[1, 1.5]}>
-      <PerspectiveCamera makeDefault position={[0, 4.5, 9]} fov={55} />
+    <Canvas
+      shadows
+      className="game-canvas"
+      dpr={[1, 1.75]}
+      gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping }}
+      onCreated={({ gl }) => {
+        gl.toneMappingExposure = 1.18;
+      }}
+    >
+      <PerspectiveCamera makeDefault position={[0, 4.1, 8.5]} fov={53} />
       <Lights />
       <GameWorld />
     </Canvas>

@@ -9,27 +9,34 @@ interface Props {
 export function StartScreen({ onStart, cameraError, mediapipeError }: Props) {
   return (
     <div className="overlay start-screen">
-      <div className="panel">
-        <h1 className="title">Pose Runner</h1>
-        <p className="subtitle">Endless runner controlled by your body</p>
+      <div className="start-content">
+        <div className="logo" aria-label="Rail Rush">
+          <span className="logo-top">RAIL</span>
+          <span className="logo-bottom">RUSH</span>
+        </div>
+        <p className="subtitle">Run the city. Own the rails.</p>
 
-        <ul className="instructions">
+        <ul className="instructions" aria-label="Controls">
           <li>
-            <strong>Pump your arms</strong> — run in place with your hands to move
+            <span className="control-icon">🏃</span>
+            <span><strong>Pump arms</strong><small>Run</small></span>
           </li>
           <li>
-            <strong>Jump</strong> — hop over low barriers
+            <span className="control-icon">↑</span>
+            <span><strong>Jump</strong><small>Hop</small></span>
           </li>
           <li>
-            <strong>Squat</strong> — duck under overhead barriers
+            <span className="control-icon">↓</span>
+            <span><strong>Squat</strong><small>Roll</small></span>
           </li>
           <li>
-            <strong>Lean left / right</strong> — switch lanes
+            <span className="control-icon">↔</span>
+            <span><strong>Lean</strong><small>Dodge</small></span>
           </li>
         </ul>
 
         <p className="hint">
-          Keyboard: hold Shift to run · ← → lanes · Space jump · ↓ duck · ` debug
+          Keyboard: hold Shift · arrows to dodge · Space to jump
         </p>
 
         {cameraError && <p className="error-msg">{cameraError}</p>}
@@ -42,8 +49,10 @@ export function StartScreen({ onStart, cameraError, mediapipeError }: Props) {
         )}
 
         <button className="btn primary" onClick={onStart}>
-          Enable Camera &amp; Start
+          <span>PLAY NOW</span>
+          <span className="play-arrow">▶</span>
         </button>
+        <div className="camera-note">Camera-powered motion controls</div>
       </div>
     </div>
   );
@@ -63,8 +72,9 @@ export function CalibrationOverlay({
   return (
     <div className="overlay calibration-overlay">
       <div className="panel">
-        <h2>Calibration</h2>
-        <p>Stand naturally in frame, arms relaxed</p>
+        <div className="eyebrow">GET READY</div>
+        <h2>Step into frame</h2>
+        <p>Stand naturally with your arms relaxed</p>
 
         {error ? (
           <>
@@ -75,7 +85,7 @@ export function CalibrationOverlay({
           </>
         ) : (
           <>
-            <div className="countdown">{countdownSeconds > 0 ? countdownSeconds : 'Go!'}</div>
+            <div className="countdown">{countdownSeconds > 0 ? countdownSeconds : 'GO!'}</div>
             <div className="progress-bar">
               <div className="progress-fill" style={{ width: `${progress * 100}%` }} />
             </div>
@@ -99,25 +109,22 @@ export function HUD() {
   return (
     <div className="hud">
       <div className="hud-score">
-        <span className="label">Score</span>
+        <span className="label">SCORE</span>
         <span className="value">{Math.floor(score)}</span>
       </div>
       <div className="hud-coins">
-        <span className="coin-icon">●</span>
+        <span className="coin-icon">★</span>
         <span className="value">{coins}</span>
       </div>
-      <div className="hud-gesture">
-        <span className="label">Gesture</span>
-        <span className="value gesture-value">{currentGesture}</span>
-      </div>
       <div className="hud-run">
-        <span className="label">{isRunning ? 'Running' : 'Pump arms to run'}</span>
-        <span className={`value ${isRunning ? 'run-on' : 'run-off'}`}>
-          {isRunning ? `${Math.round(runIntensity * 100)}%` : '—'}
+        <span className="run-status">
+          <i className={isRunning ? 'active' : ''} />
+          {isRunning ? `RUNNING ${Math.round(runIntensity * 100)}%` : 'PUMP ARMS TO RUN'}
         </span>
+        <span className="gesture-value">{currentGesture}</span>
       </div>
       <div className="hud-speed">
-        <span className="label">Speed</span>
+        <span className="speed-lines">≋</span>
         <span className="value">{speed.toFixed(0)}</span>
       </div>
     </div>
@@ -135,8 +142,10 @@ export function GameOverScreen() {
   return (
     <div className="overlay gameover-screen">
       <div className="panel">
-        <h2>Game Over</h2>
+        <div className="eyebrow">RUN COMPLETE</div>
+        <h2>Nice run!</h2>
         <div className="final-score">{Math.floor(score)}</div>
+        <div className="score-caption">POINTS</div>
         <p className="coins-collected">{coins} coins collected</p>
         <p className="high-score">
           High Score: {Math.floor(highScore)}

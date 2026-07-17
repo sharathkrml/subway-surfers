@@ -119,8 +119,6 @@ export default function App() {
     );
   }, [debug.calibrating, debug.calibrationProgress]);
 
-  const showGame =
-    status === 'playing' || status === 'gameover' || status === 'calibrating';
   const showPip = status !== 'idle' && webcam.ready;
 
   return (
@@ -133,7 +131,7 @@ export default function App() {
         className="webcam-video-hidden"
       />
 
-      {showGame && <GameScene />}
+      <GameScene />
 
       {status === 'idle' && (
         <StartScreen
